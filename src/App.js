@@ -15,28 +15,23 @@ client.config.configureEditorPanel([
 function App() {
   const config = useConfig();
 
-  // Real Sigma data
+  // Sigma source data
   const data = useElementData(config.source);
 
   const [search, setSearch] = useState("");
 
-  // Handle empty data safely
+  // Get all columns safely
   const columns = Object.keys(data || {});
 
-  if (columns.length === 0) {
-    return (
-      <div style={{ padding: "20px" }}>
-        <h2>Sigma Global Search Plugin</h2>
-        <p>Please select a source table in Sigma.</p>
-      </div>
-    );
-  }
-
-  const rowCount = data[columns[0]].length;
-
-  const rows = [];
+  // Get row count safely
+  const rowCount =
+    columns.length > 0
+      ? data[columns[0]].length
+      : 0;
 
   // Build rows
+  const rows = [];
+
   for (let i = 0; i < rowCount; i++) {
     const row = {};
 
@@ -47,7 +42,7 @@ function App() {
     rows.push(row);
   }
 
-  // Search across all columns
+  // Global search across all columns
   const filteredRows = rows.filter((row) =>
     columns.some((col) =>
       String(row[col])
@@ -69,36 +64,32 @@ function App() {
           padding: "10px",
           width: "350px",
           marginBottom: "20px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
         }}
       />
 
-      <p>
-        <b>Total Rows:</b> {rows.length}
-      </p>
-
-      <div>
-        {filteredRows.length > 0 ? (
-          filteredRows.map((row, index) => (
-            <div
-              key={index}
-              style={{
-                border: "1px solid #ddd",
-                padding: "10px",
-                marginBottom: "10px",
-                borderRadius: "5px",
-              }}
-            >
-              {columns.map((col) => (
-                <div key={col}>
-                  <b>{col}:</b> {String(row[col])}
-                </div>
-              ))}
-            </div>
-          ))
-        ) : (
-          <p>No matching results</p>
-        )}
-      </div>
+      {filteredRows.length > 0 ? (
+        filteredRows.map((row, index) => (
+          <div
+            key={index}
+            style={{
+              border: "1px solid #ddd",
+              padding: "10px",
+              marginBottom: "10px",
+              borderRadius: "5px",
+            }}
+          >
+            {columns.map((col) => (
+              <div key={col}>
+                <b>{col}:</b> {String(row[col])}
+              </div>
+            ))}
+          </div>
+        ))
+) : search ? (
+  <p>No matching results</p>
+) : null}
     </div>
   );
 }
