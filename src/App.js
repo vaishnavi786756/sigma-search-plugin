@@ -43,13 +43,13 @@ function App() {
   }
 
   // Global search across all columns
-  const filteredRows = rows.filter((row) =>
-    columns.some((col) =>
-      String(row[col])
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    )
-  );
+ const filteredRows = rows.filter((row) =>
+  columns.some((col) =>
+    String(row[col] ?? "")
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  )
+);
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
@@ -68,6 +68,9 @@ function App() {
           borderRadius: "5px",
         }}
       />
+      <pre>
+  {JSON.stringify(data, null, 2)}
+</pre>
 
       {filteredRows.length > 0 ? (
         filteredRows.map((row, index) => (
