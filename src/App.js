@@ -14,22 +14,29 @@ client.config.configureEditorPanel([
 
 function App() {
   const config = useConfig();
+
+  // Real Sigma data
   const data = useElementData(config.source);
 
   const [search, setSearch] = useState("");
 
-  // Get all columns
+  // Handle empty data safely
   const columns = Object.keys(data || {});
 
-  // Total rows count
-  const rowCount =
-    columns.length > 0
-      ? data[columns[0]].length
-      : 0;
+  if (columns.length === 0) {
+    return (
+      <div style={{ padding: "20px" }}>
+        <h2>Sigma Global Search Plugin</h2>
+        <p>Please select a source table in Sigma.</p>
+      </div>
+    );
+  }
 
-  // Build row objects
+  const rowCount = data[columns[0]].length;
+
   const rows = [];
 
+  // Build rows
   for (let i = 0; i < rowCount; i++) {
     const row = {};
 
@@ -65,15 +72,19 @@ function App() {
         }}
       />
 
+      <p>
+        <b>Total Rows:</b> {rows.length}
+      </p>
+
       <div>
         {filteredRows.length > 0 ? (
           filteredRows.map((row, index) => (
             <div
               key={index}
               style={{
+                border: "1px solid #ddd",
                 padding: "10px",
                 marginBottom: "10px",
-                border: "1px solid #ddd",
                 borderRadius: "5px",
               }}
             >
