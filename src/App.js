@@ -20,6 +20,8 @@ function App() {
   console.log("🔵 SOURCE ELEMENT:", config?.source);
   console.log("🔵 SOURCE TYPE:", typeof config?.source);
 
+    console.log("SIGMA WINDOW CHECK:", window.__SIGMA__);
+
   const data = useElementData(config.source);
 
   // 🟢 DATA DEBUG
